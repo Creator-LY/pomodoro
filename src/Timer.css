@@ -1,0 +1,56 @@
+.time-line {
+    width: 700px;
+    height: 400px;
+    line-height: 400px;
+    outline: none;
+    text-align: center;
+    box-shadow: 0 0 10px #9ecaed;
+    border-radius: 100px;
+}
+#animate {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    position: relative;
+    top: 0px;
+    right: 0px;
+    width: 700px;
+    height: 400px;
+    transform: rotateY(180deg) rotateZ(360deg);
+}
+#animate path {
+    fill: none;
+    stroke: white;
+    stroke-width: 7px;
+    stroke-dasharray: 2022px;
+    stroke-dashoffset: 0px;
+    stroke-linecap: round;
+}
+
+span {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -150%);
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+    width: 100%;
+    color: white;
+    font-weight: bold;
+    font-size: 100px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-shadow: 4px 4px 4px black;
+}
+#start-button {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 50px;
+    height: 50px;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background: 0%;
+}

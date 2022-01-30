@@ -1,0 +1,93 @@
+.top-panel {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    height: 50px;
+    background-color: rgb(57, 57, 141);
+}
+.icon path {
+    stroke: lightcyan;
+}
+.icon polygon {
+    stroke:  lightcyan;
+}
+.icon {
+    margin: 10px;
+    margin-right: -5px;
+}
+.icon-button {
+    width: 40px;
+    height: 50px;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background: 0%;
+}
+.work-circle {
+    position: relative;
+    display: inline-grid;
+    top: -10px;
+    left: 50px;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    margin-left: 20px;
+    transition: 1s ease-in-out;
+    cursor: pointer;
+}
+.work-circle:hover {
+    box-shadow: 0 0 10px #9ecaed;
+}
+.left-border {
+    height: 50px;
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: [main-start] 1fr [content-start] 1fr;
+    grid-template-rows: [main-start] 25px [content-start] 25px;
+    top: -30px;
+    left: 40px;
+    width: 170px;
+    border-left: solid;
+    border-width: thick;
+    padding: 3px;
+    margin-left: 10px;
+    cursor: default;
+}
+#status {
+    position: relative;
+    display: inline-grid;
+    grid-column-start: main-start;
+    grid-row-start: main-start;
+    width: 60px;
+    margin: 0;
+    padding-left: 5px;
+    padding-top: 5px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: white;
+}
+#time {
+    position: relative;
+    display: inline-grid;
+    grid-column-start: content-start;
+    grid-row-start: main-start;
+    width: 40px;
+    margin: 0;
+    padding-top: 5px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: white;
+}
+#text {
+    position: relative;
+    display: grid;
+    grid-column-start: main-start;
+    grid-column-end: content-end;
+    grid-row-start: content-start;
+    margin: 0;
+    padding-left: 5px;
+    padding-top: 5px;
+    height: 22.5px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: white;
+    overflow: hidden;
+}
