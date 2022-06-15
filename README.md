@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Getting Started with Pomodoro Timer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Host the wesbite, set time for your study and enjoy relaxing schedule of work.
 
 ## Available Scripts
 
