@@ -2,6 +2,13 @@
 
 Host the wesbite, set time for your study and enjoy relaxing schedule of work.
 
+## Guidelines to setup
+
+### Prerequisites
+
+- Project uses React, Node.js
+- Run `npm install` to install `node_modules`
+
 ## Available Scripts
 
 In the project directory, you can run:
