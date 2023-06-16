@@ -4,7 +4,7 @@
     width: 100%;
     overflow: hidden;
     height: 50px;
-    background-color: rgb(57, 57, 141);
+    background-color: transparent;
 }
 .icon path {
     stroke: lightcyan;

@@ -1,21 +1,28 @@
 import React from 'react';
 import Timer from './Timer';
 import TopPanel from './TopPanel';
-import Schedules from './Schedules';
-import './App.css';
+import SidePanel from './SidePanel';
 import { useState, useEffect } from 'react'
+import { useSpring, animated } from 'react-spring';
+import './App.css';
+import { FaAngleRight } from 'react-icons/fa'
 import sound from './alarm.wav'
+
 
 function App() {
   const [timerSeconds, setTimerSeconds] = useState(0)
   const [running, setRunning]  = useState(false)
-  const [showSchedule, setShowSchedule] = useState(false)
+  const [showPanel, setshowPanel] = useState(false)
   const [schedulesList, setScheduleList] = useState([])
   const [enable, setEnable] = useState(true)
   const [history, setHistory] = useState([])
   const [animation, setAnimation] = useState(true)
   const [duration, setDuration] = useState(0)
   const [resetA, setResetA] = useState(false)
+
+  const slideInAnimation = useSpring({
+    transform: showPanel ? 'translateX(0)' : 'translateX(-100%)',
+  });
 
   
   const formatTime = (timerSeconds) => {
@@ -77,8 +84,8 @@ function App() {
     }
   }
 
-  const toggleSchedule = () => {
-    setShowSchedule(!showSchedule)
+  const toggleOverlay = () => {
+    setshowPanel(!showPanel)
     setRunning(false)
   }
 
@@ -194,14 +201,25 @@ function App() {
 
   return (
     <div>
+      {/* Floating stars */}
       <div id="stars"></div>
       <div id="stars2"></div>
       <div id="stars3"></div>
-      <TopPanel onStop={stopTime} onSchedule={toggleSchedule} onReset={reset} onForward={forward} schedulesList={schedulesList} />
+      
+      <TopPanel onStop={stopTime} onOverlay={toggleOverlay} onReset={reset} onForward={forward} schedulesList={schedulesList} />
+
       <Timer className="center-on-page" time={formatTime(timerSeconds)} onStart={startTime} running={running} animation={animation} 
       duration={duration} reset={resetA} />
-      { showSchedule ? <Schedules onSchedule={toggleSchedule} schedulesList={schedulesList} onPomo={setPomo} addTask={addTask.bind(this)}
-        moveUp={moveUp.bind(this)} moveDown={moveDown.bind(this)} updateSchedule={updateSchedule.bind(this)} /> : null }
+
+      <div className="side-button" onClick={toggleOverlay}>
+        <FaAngleRight className="side-button-icon" size="3em" cursor="pointer" />
+      </div>
+
+      <animated.div style={{ ...slideInAnimation, height: '100vh' }}>
+        <SidePanel onOverlay={toggleOverlay} schedulesList={schedulesList} onPomo={setPomo} addTask={addTask.bind(this)}
+        moveUp={moveUp.bind(this)} moveDown={moveDown.bind(this)} updateSchedule={updateSchedule.bind(this)} />
+      </animated.div>
+      
       <audio id="audio" src={sound} hidden={true} type="audio/wav"></audio>
     </div>
   );
