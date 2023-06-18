@@ -1,47 +1,55 @@
 import './Timer.css'
-import { VscDebugStart } from 'react-icons/vsc'
 import React from 'react'
-import { useSpring, animated } from 'react-spring'
+import { useState, useEffect } from 'react'
+import { useSpring, animated } from 'react-spring';
 
-export default function Timer({time, onStart, running, animation, duration, reset}) {
-    const props = useSpring({ 
-        from: {
-            strokeDashoffset: "0px",
-        },
-        to: {
-            strokeDashoffset: "2022px",
-        },
-        enter: {
-            strokeDashoffset: "0px",
-        },
-        leave: {
-            strokeDashoffset: "0px",
-        },
-        loop: true,
-        config: { duration: duration },
-        pause: animation,
-        reset: reset,
-        onReset: () => {console.log("reset")}
-     })
+export default function Timer({remainingTime, totalTime}) {
+    const [minute, setMinute] = useState(0);
+    const [second, setSecond] = useState(0);
+    const [blinkColor, setBlinkColor] = useState(false);
+
+    useEffect(() => {
+        setMinute(Math.floor(remainingTime / 60));
+        setSecond(remainingTime % 60);
+
+        if (remainingTime === 0 && totalTime !== 0) {
+            let blinkCount = 4;
+            const blinkInterval = setInterval(() => {
+                setBlinkColor((prevColor) => !prevColor);
+                blinkCount--;
+
+                if (blinkCount === 0) {
+                    clearInterval(blinkInterval);
+                }
+            }, 500);
+        }
+    }, [remainingTime, totalTime]);
+
+    const circleRadius = 45;
+    const circleCircumference = 2 * Math.PI * circleRadius;
+    const progress = totalTime > 0 ? circleCircumference - ((totalTime - remainingTime) / totalTime) * circleCircumference : circleCircumference;
+
+    const animatedPathProps = useSpring({
+        strokeDashoffset: progress !== circleCircumference ? circleCircumference - progress : 0,
+        strokeDasharray: circleCircumference,
+        stroke: remainingTime === 0 ? (blinkColor ? '#ff7675' : 'white') : (remainingTime <= 0.1 * totalTime ? '#fdcb6e' : 'white'),
+        config: { duration: remainingTime === 0 ? 0 : 1000 }
+    });
     
     return (
-        <div className="center-on-page">
-            <div className="time-line">
-                <svg id="animate">
-                    <animated.path d="M350 3
-                            h247
-                            q100 0 100 100
-                            v194
-                            q0 100 -100 100
-                            h-494
-                            q-100 0 -100 -100
-                            v-194
-                            q0 -100 100 -100
-                            h247
-                            Z"  style={props}/>
+        <div className="time-line">
+            <div className="timer-wrapper">
+                <svg style={{transform: "rotateY(-180deg) rotateZ(-90deg)"}} viewBox="0 0 100 100">
+                    <circle className="timer-base" cx="50" cy="50" r={circleRadius} />
+                    <animated.circle cx="50" cy="50" r={circleRadius}
+                        strokeWidth="5" strokeLinecap="round" fill="transparent" style={animatedPathProps}></animated.circle>
                 </svg>
-                <span>{time}</span>
-                {(!running && time !== "00:00:00") && (<button onClick={onStart}><VscDebugStart color="white" id="start-button" size="2em" cursor="pointer"  /></button>)}
+                <div className="minute">
+                    {minute.toString().padStart(2, '0')}
+                </div>
+                <div className="second">
+                    {second.toString().padStart(2, '0')}
+                </div>
             </div>
         </div>
     )

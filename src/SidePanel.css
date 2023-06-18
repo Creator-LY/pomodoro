@@ -1,3 +1,9 @@
+.sidepanel {
+    background-color: #FFFFCC;
+    width: 100%;
+    height: 100%;
+}
+
 .leftpanel {
     position: fixed;
     top: 0;

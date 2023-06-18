@@ -1,93 +1,68 @@
 .top-panel {
-    position: fixed;
     top: 0;
+    position: fixed;
     width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     overflow: hidden;
-    height: 50px;
     background-color: transparent;
 }
-.icon path {
-    stroke: lightcyan;
+
+.left-section,
+.middle-section,
+.right-section {
+  padding: 10px 20px; 
 }
-.icon polygon {
-    stroke:  lightcyan;
+
+.middle-section {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+    font-weight: bold;
+    color: white;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
 }
-.icon {
-    margin: 10px;
-    margin-right: -5px;
+
+.middle-section:hover {
+    opacity: 1;
+    text-shadow: 0 0 30px #ffffff8b;
 }
+
+.left-section,
+.right-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.left-section {
+    justify-content: left;
+}
+
+.right-section {
+    justify-content: right;
+}
+
 .icon-button {
     width: 40px;
-    height: 50px;
+    height: 40px;
     margin: 0;
     border: 0;
     padding: 0;
-    background: 0%;
-}
-.work-circle {
-    position: relative;
-    display: inline-grid;
-    top: -10px;
-    left: 50px;
-    height: 25px;
-    width: 25px;
-    border-radius: 50%;
-    margin-left: 20px;
-    transition: 1s ease-in-out;
+    background: transparent;
+    color: white;
     cursor: pointer;
 }
-.work-circle:hover {
-    box-shadow: 0 0 10px #9ecaed;
-}
-.left-border {
-    height: 50px;
-    position: relative;
-    display: inline-grid;
-    grid-template-columns: [main-start] 1fr [content-start] 1fr;
-    grid-template-rows: [main-start] 25px [content-start] 25px;
-    top: -30px;
-    left: 40px;
-    width: 170px;
-    border-left: solid;
-    border-width: thick;
-    padding: 3px;
-    margin-left: 10px;
-    cursor: default;
-}
-#status {
-    position: relative;
-    display: inline-grid;
-    grid-column-start: main-start;
-    grid-row-start: main-start;
-    width: 60px;
-    margin: 0;
-    padding-left: 5px;
-    padding-top: 5px;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: white;
-}
-#time {
-    position: relative;
-    display: inline-grid;
-    grid-column-start: content-start;
-    grid-row-start: main-start;
-    width: 40px;
-    margin: 0;
-    padding-top: 5px;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: white;
-}
-#text {
-    position: relative;
-    display: grid;
-    grid-column-start: main-start;
-    grid-column-end: content-end;
-    grid-row-start: content-start;
-    margin: 0;
-    padding-left: 5px;
-    padding-top: 5px;
-    height: 22.5px;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: white;
-    overflow: hidden;
+
+.cross-icon {
+    position: absolute;
+    display: block;
+    transform: translate(25%, -80%);
+    font-size: 3em;
+    color: #ff7675;
 }

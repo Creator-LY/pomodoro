@@ -1,42 +1,37 @@
+import Timer from './Timer';
+import { useState } from 'react'
 import './TopPanel.css'
-import { GrSchedulePlay, GrPowerReset, GrFastForward, GrPause } from 'react-icons/gr';
-import { useState, useEffect } from 'react'
+import { FaPlay, FaPause, FaRedo, FaStepForward, FaBell, FaMusic } from 'react-icons/fa'
 
 
-export default function TopPanel({ onStop, onSchedule, onReset, onForward, schedulesList }) {
-    const [displayWork, setDisplayWork] = useState([])
-    const [laterWork, setLaterWork] = useState([])
+export default function TopPanel({ remainingTime, totalTime, running, onStart, onStop, onReset, onForward }) {
+    const [isBellDisable, setBellDisable] = useState(false);
+    const [isMusicDisable, setMusicDisable] = useState(false);
 
-    useEffect(() => {
-        let arr = [...schedulesList].slice(0, 2)
-        setDisplayWork(arr)
-        let arr2 = [...schedulesList].slice(2)
-        let arr3 = []
-        for (let i=0; i<arr2.length; i++) {
-            let dict = {}
-            dict.status = arr2[i].status
-            dict.id = i + new Date().getTime()
-            arr3.push(dict)
-        }
-        setLaterWork(arr3)
-    }, [schedulesList])
+    const handleBellClick = () => {
+        setBellDisable(!isBellDisable);
+    };
+    
+      const handleMusicClick = () => {
+        setMusicDisable(!isMusicDisable);
+    };
 
     return (
         <div className="top-panel">
-            <button className="icon-button" onClick={onSchedule}><GrSchedulePlay className="icon" size="2em" cursor="pointer" /></button>
-            <button className="icon-button" onClick={onReset}><GrPowerReset className="icon" size="2em" cursor="pointer" /></button>
-            <button className="icon-button" onClick={onStop}><GrPause className="icon" size="2em" cursor="pointer" /></button>
-            <button className="icon-button" onClick={onForward}><GrFastForward className="icon" size="2em" cursor="pointer" /></button>
-            {displayWork.map((work) => {
-                return <div key={displayWork.indexOf(work)} className="left-border" style={{ borderColor: work.status ? 'orange' : 'rgb(51, 102, 255)' }}>
-                            <p id="status">{work.status ? 'Work' : 'Rest'}</p>
-                            <p id="time">{work.time}</p>
-                            <p id="text">{work.description}</p>
-                       </div>
-            })}
-            {laterWork.map((status) => {
-                return <div key={"status" + status.id} className="work-circle" style={{ backgroundColor: status.status ? 'orange' : 'rgb(66, 84, 245)' }}></div>
-            })}
+            <div className="left-section">
+                <button className="icon-button" onClick={handleBellClick}><FaBell size="2em" />{isBellDisable && <span className="cross-icon">X</span>}</button>
+                <button className="icon-button" onClick={handleMusicClick}><FaMusic size="2em" />{isMusicDisable && <span className="cross-icon">X</span>}</button>
+            </div>
+            <div className="middle-section">--- Working ---</div>
+            <div className="right-section">
+                { running ? <button className="icon-button" onClick={onStop}><FaPause size="2em" /></button>
+                  : <button className="icon-button" onClick={onStart}><FaPlay size="2em" /></button>}
+                
+                <button className="icon-button" onClick={onReset}><FaRedo size="2em" /></button>
+                <button className="icon-button" onClick={onForward}><FaStepForward size="2em" /></button>
+                
+                <Timer remainingTime={remainingTime} totalTime={totalTime} />
+            </div>
         </div>
     )
 }
