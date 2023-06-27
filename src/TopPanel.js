@@ -1,7 +1,7 @@
 import Timer from './Timer';
-import { useState } from 'react'
-import './TopPanel.css'
-import { FaPlay, FaPause, FaRedo, FaStepForward, FaBell, FaMusic } from 'react-icons/fa'
+import { useState } from 'react';
+import './TopPanel.css';
+import { FaPlay, FaPause, FaRedo, FaStepForward, FaBell, FaMusic } from 'react-icons/fa';
 
 
 export default function TopPanel({ remainingTime, totalTime, running, onStart, onStop, onReset, onForward }) {

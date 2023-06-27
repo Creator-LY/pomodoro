@@ -8,6 +8,21 @@ html {
 
 body {
     margin: 0;
+    font-family: 'ArialRounded', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font-weight: 300;
+}
+
+input:focus {
+    outline: none;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+.t18 {
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .side-button {

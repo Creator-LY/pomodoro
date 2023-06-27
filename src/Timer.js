@@ -1,6 +1,6 @@
-import './Timer.css'
-import React from 'react'
-import { useState, useEffect } from 'react'
+import './Timer.css';
+import React from 'react';
+import { useState, useEffect } from 'react';
 import { useSpring, animated } from 'react-spring';
 
 export default function Timer({remainingTime, totalTime}) {
@@ -27,12 +27,13 @@ export default function Timer({remainingTime, totalTime}) {
 
     const circleRadius = 45;
     const circleCircumference = 2 * Math.PI * circleRadius;
+    const orangeTime = 0.2 * totalTime;
     const progress = totalTime > 0 ? circleCircumference - ((totalTime - remainingTime) / totalTime) * circleCircumference : circleCircumference;
 
     const animatedPathProps = useSpring({
         strokeDashoffset: progress !== circleCircumference ? circleCircumference - progress : 0,
         strokeDasharray: circleCircumference,
-        stroke: remainingTime === 0 ? (blinkColor ? '#ff7675' : 'white') : (remainingTime <= 0.1 * totalTime ? '#fdcb6e' : 'white'),
+        stroke: remainingTime === 0 ? (blinkColor ? '#ff7675' : 'white') : (remainingTime <= orangeTime ? '#fdcb6e' : 'white'),
         config: { duration: remainingTime === 0 ? 0 : 1000 }
     });
     

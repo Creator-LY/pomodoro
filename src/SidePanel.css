@@ -1,29 +1,12 @@
 .sidepanel {
-    background-color: #FFFFCC;
+    position: fixed;
+    background-color: rgb(5, 127, 168);
     width: 100%;
     height: 100%;
+    overflow-x:hidden;
+    overflow-y: auto;
 }
 
-.leftpanel {
-    position: fixed;
-    top: 0;
-    display: inline-block;
-    width: 20%;
-    height: 100%;
-    background: white;
-    box-shadow: inset 0 0 10px #000000;
-    border-right: 3px solid black;
-    box-sizing: border-box;
-}
-.rightpanel {
-    position: fixed;
-    top: 0;
-    display: inline-block;
-    left: 20%;
-    width: 80%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.75);
-}
 #exit-button {
     display: block;
     position: absolute;
@@ -37,155 +20,65 @@
     background: 0%;
     color: white
 }
-.header {
-    position: relative;
-    top: 68px;
-    background-color: rgb(207, 48, 48);
-    height: 30px;
-    padding: 0px 0px 15px 0.8px;
-    border-bottom: grey solid;
-    border-width: thin;
-    font: italic small-caps bold 16px/2 cursive;
-    font-size: 1.5em;
+
+.task-container {
+    max-width: 480px;
+    margin: 20px auto 42px;
+    display: block;
+}
+
+.head-container {
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    align-items: center;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+    padding-bottom: 14px;
     color: white;
-    text-shadow: none;
 }
-#header-id {
-    margin: 0;
-    padding: 0 0 0 15px;
-}
-#list-container {
-    padding: 0 10px 0 10px;
-}
-.list {
-    width: 100%;
-    height: 50px;
-    list-style-type: none;
-    padding: 0;
-    margin-bottom: 10px;
-    background-color: orange;
-    box-shadow: 2px 2px 1px 1px grey;
-    border-radius: 5px;
-}
-.circle {
-    cursor: pointer;
-    background-color: rgba(38, 38, 85, 0.9);
-    border: none;
-    border-radius: 50%;
-    box-shadow: none;
+
+.manage-button {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
     text-align: center;
-    color: rgb(24, 24, 31);
-    transition: 1s ease-in-out;
-}
-.circle:hover {
-    color: white;
-    background-color: rgb(52, 52, 102);
-    box-shadow: 0 0 10px #9ecaed;
-}
-#time-5 {
-    position: absolute;
-    top: 50px;
-    left: 200px;
-    width: 100px;
-    height: 100px;
-    font-size: 1em;
-}
-#time-10 {
-    position: absolute;
-    top: 100px;
-    left: 60px;
-    width: 120px;
-    height: 120px;
-    font-size: 1.5em;
-}
-#time-15 {
-    position: absolute;
-    top: 230px;
-    left: 10px;
-    width: 140px;
-    height: 140px;
-    font-size: 2em;
-}
-#time-20 {
-    position: absolute;
-    top: 380px;
-    left: 10px;
-    width: 160px;
-    height: 160px;
-    font-size: 2.5em;
-}
-#time-25 {
-    position: absolute;
-    top: 540px;
-    left: 60px;
-    width: 200px;
-    height: 200px;
-    font-size: 3em;
-}
-#time-30 {
-    position: absolute;
-    top: 180px;
-    left: 160px;
-    width: 240px;
-    height: 240px;
-    font-size: 3.5em;
-}
-#time-45 {
-    position: absolute;
-    top: 10px;
-    left: 375px;
-    width: 280px;
-    height: 280px;
-    font-size: 4em;
-}
-#time-60 {
-    position: absolute;
-    top: 410px;
-    left: 290px;
-    width: 320px;
-    height: 320px;
-    font-size: 4.5em;
-}
-#time-pomodoro {
-    position: absolute;
-    top: 10%;
-    left: 50%;
-    width: 600px;
-    height: 600px;
-    font-size: 7em;
-}
-.time-label {
-    margin: 1px 0px 0px 15px;
-    padding: 0;
-}
-.time-description {
-    display: inline-block;
-    margin: 0 0 0 5px;
-    width: 150px;
-    overflow: hidden;
-}
-#up-button {
-    width: 25px;
-    height: 25px;
-    border: 0;
-    margin-left: 25px;
-    background: 0%;
-    color: rgb(35, 129, 35);
-}
-#down-button {
-    width: 25px;
-    height: 25px;
-    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.9;
+    background: none rgba(255, 255, 255, 0.2);
+    box-shadow: none;
     margin-left: 10px;
-    background: 0%;
-    color: rgb(172, 44, 44);
+    font-size: 13px;
+    padding: 8px;
+    min-width: auto;
+    border: none;
+    color: white !important;
 }
-#edit-button {
-    position: relative;
-    width: 25px;
-    height: 25px;
-    border: 0;
-    margin-left: 10px;
-    background: 0%;
-    color: rgb(27, 27, 114);
+
+.manage-section {
+    position: absolute;
+    border-radius: 4px;
+    opacity: 1;
+    padding: 4px 0px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 10px 20px, rgba(0, 0, 0, 0.1) 0px 3px 6px;
+    display: block;
+    pointer-events: auto;
+    background-color: white;
+    transform: translateY(10px);
+    width: 210px;
+    right: 0px;
+    z-index: 1;
+}
+
+.manage-block {
+    color: #4f2d2b;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 10px 16px;
+    font-size: 16px;
+    cursor: pointer;
 }
