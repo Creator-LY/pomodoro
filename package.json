@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@react-three/drei": "^9.78.1",
+    "@react-three/fiber": "^8.13.4",
     "@testing-library/jest-dom": "^5.13.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
@@ -11,11 +13,9 @@
     "react-dom": "18.0.0",
     "react-icons": "^4.2.0",
     "react-scripts": "^5.0.1",
-    "react-spring": "^9.2.3",
+    "react-spring": "^9.7.2",
+    "three": "^0.154.0",
     "web-vitals": "^1.1.2"
-  },
-  "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "7.21.11"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -40,5 +40,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "description": "Host the wesbite, set time for your study and enjoy relaxing schedule of work.",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }
 }

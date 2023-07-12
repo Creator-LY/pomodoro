@@ -1,11 +1,14 @@
 import React from 'react';
 import TopPanel from './TopPanel';
 import SidePanel from './SidePanel';
-import { useState, useEffect } from 'react';
+import Model from './Model';
+import { useState, useEffect, Suspense } from 'react';
 import { useSpring, animated } from 'react-spring';
-import './App.css';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Environment } from '@react-three/drei';
 import { FaAngleRight } from 'react-icons/fa';
-import sound from './alarm.wav';
+import sound from './assets/alarm.wav';
+import './App.css';
 
 
 function App() {
@@ -16,6 +19,7 @@ function App() {
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
   const [running, setRunning]  = useState(false);
+
 
   // Slide in animation for Side Panel
   const slideInAnimation = useSpring({
@@ -117,6 +121,21 @@ function App() {
       <TopPanel remainingTime={timerSeconds} totalTime={totalTime} running={running} 
         onStart={startTime} onStop={stopTime} onReset={reset} onForward={forward} />
 
+      <div className="center-model">
+        <Canvas camera={{ position: [-9.331, 4.615, 9.464], rotation: [-0.233, -0.771, -0.164], zoom: "2" }}>
+          <Suspense fallback={null}>
+            <Model running={running} />
+            <OrbitControls 
+              enablePan={false}
+              enableZoom={false}
+              minPolarAngle={Math.PI/4}
+              maxPolarAngle={3 * Math.PI/5}
+            />
+            <Environment preset="warehouse" />
+          </Suspense>
+        </Canvas>
+      </div>
+
       <div className="side-button" onClick={toggleOverlay}>
         <FaAngleRight className="side-button-icon" size="3em" />
       </div>
@@ -125,6 +144,7 @@ function App() {
         <SidePanel onOverlay={toggleOverlay} schedulesList={schedulesList} onAddTask={addTask.bind(this)}
           onUpdateSchedule={updateSchedule.bind(this)} onClearSchedule={clearSchedule} />
       </animated.div>
+
       
       <audio id="audio" src={sound} hidden={true} type="audio/wav"></audio>
     </div>

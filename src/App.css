@@ -60,6 +60,14 @@ textarea:focus {
     animation: pulse 1.5s ease-in-out infinite;
 }
 
+.center-model {
+    width: 50%;
+    height: 100vh;
+    position: absolute;
+    left: 25%;
+    top: 30%;
+}
+
 @keyframes pulse {
     0% {
       transform: translate(-50%, -50%) scale(0);
