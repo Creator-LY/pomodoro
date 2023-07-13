@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import './DragEditCard.css';
 import { MdAddBox, MdEdit, MdPunchClock } from 'react-icons/md';
+import { v4 as uuidv4 } from 'uuid';
 
 
 export default function DragEditCard({ scheduleList = [], onAddTask, onUpdateSchedule }) {
@@ -18,7 +19,7 @@ export default function DragEditCard({ scheduleList = [], onAddTask, onUpdateSch
     const handleAddTask = () => {
         // Create a temporary task for editing
         const newTask = {
-          id: Date.now().toString(),
+          id: uuidv4(),
           title: "",
           time: "05:00",
           note: ""
@@ -99,7 +100,7 @@ export default function DragEditCard({ scheduleList = [], onAddTask, onUpdateSch
     };
 
     const handleDragStart = (e, index) => {
-        setEditingTask(null)
+        handleCancelTask();
         e.dataTransfer.setData('text/plain', index);
         setDraggedOverIndex(index);
         e.dataTransfer.effectAllowed = 'move';
@@ -121,7 +122,6 @@ export default function DragEditCard({ scheduleList = [], onAddTask, onUpdateSch
             updatedTasks.splice(destinationIndex, 0, reorderedItem);
             onUpdateSchedule(updatedTasks);
         }
-        setDraggedOverIndex(null);
     };
 
     return (
@@ -191,10 +191,11 @@ export default function DragEditCard({ scheduleList = [], onAddTask, onUpdateSch
                     ) 
                     : (
                         <div className={`info-card ${draggedOverIndex === index ? 'drag-to' : ''}`}
-                            draggable={editingTask == null}
+                            draggable={editingTask === null}
                             onDragStart={(e) => handleDragStart(e, index)}
                             onDragOver={(e) => handleDragOver(e, index)}
                             onDrop={(e) => handleDrop(e, index)}
+                            onDragEnd={() => setDraggedOverIndex(null)}
                         >
                             <div className="info-card-head">
                                 <div className="info-card-title">{task.title}</div>

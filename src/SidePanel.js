@@ -5,17 +5,9 @@ import DragEditCard from './DragEditCard';
 import { ImCross, ImPencil } from 'react-icons/im';
 
 
-export default function Schedules({onOverlay, schedulesList, onAddTask, onUpdateSchedule, onClearSchedule}) {
+export default function Schedules({onOverlay, scheduleList, onAddTask, onAddWork, onAddRest, 
+                                   onDuplicateFirst, onDuplicateLast, onUpdateSchedule, onClearSchedule}) {
     const [showManage, setShowManage] = useState(false);
-
-    const handleManageClick = () => {
-        setShowManage(!showManage);
-    };
-
-    const handleClear = () => {
-        onClearSchedule();
-        setShowManage(false);
-    }
 
     return (
         <div className="sidepanel">
@@ -24,13 +16,17 @@ export default function Schedules({onOverlay, schedulesList, onAddTask, onUpdate
                 <div className="head-container">
                     <span className="t18">Tasks</span>
                     <div style={{ position : "relative" }}>
-                        <button className="manage-button" onClick={handleManageClick}><ImPencil cursor="pointer" size="1.5em" /></button>
+                        <button className="manage-button" onClick={() => {setShowManage(!showManage);}}><ImPencil cursor="pointer" size="1.5em" /></button>
                         {showManage ? <div className="manage-section">
-                            <div className="manage-block" onClick={handleClear}>Clear all tasks</div>
+                            <div className="manage-block" onClick={() => {onAddWork();setShowManage(false);}}>Add work block (basic)</div>
+                            <div className="manage-block" onClick={() => {onAddRest();setShowManage(false);}}>Add rest block (basic)</div>
+                            <div className="manage-block" onClick={() => {onDuplicateFirst();setShowManage(false);}}>Duplicate first task</div>
+                            <div className="manage-block" onClick={() => {onDuplicateLast();setShowManage(false);}}>Duplicate last task</div>
+                            <div className="manage-block" onClick={() => {onClearSchedule();setShowManage(false);}}>Clear all tasks</div>
                         </div> : null}
                     </div>
                 </div>
-                <DragEditCard scheduleList={schedulesList} onAddTask={onAddTask} onUpdateSchedule={onUpdateSchedule} />
+                <DragEditCard scheduleList={scheduleList} onAddTask={onAddTask} onUpdateSchedule={onUpdateSchedule} />
             </div>
         </div>
     )

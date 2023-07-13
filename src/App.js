@@ -6,6 +6,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSpring, animated } from 'react-spring';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
+import { v4 as uuidv4 } from 'uuid';
 import { FaAngleRight } from 'react-icons/fa';
 import sound from './assets/alarm.wav';
 import './App.css';
@@ -13,7 +14,7 @@ import './App.css';
 
 function App() {
   const [showPanel, setshowPanel] = useState(false);
-  const [schedulesList, setScheduleList] = useState([]);
+  const [scheduleList, setScheduleList] = useState([]);
   const [history, setHistory] = useState([]);
 
   const [timerSeconds, setTimerSeconds] = useState(0);
@@ -39,31 +40,31 @@ function App() {
       interval = setInterval(() => {
         setTimerSeconds(timerSeconds => timerSeconds - 1);
       }, 1000)
-    } else if (timerSeconds === 0 && schedulesList.length >= 1 && running) {
-      let arr = [...schedulesList];
+    } else if (timerSeconds === 0 && scheduleList.length >= 1 && running) {
+      let arr = [...scheduleList];
       arr.shift();
       setScheduleList(arr);
       setTimeout(() => { document.getElementById("audio").load() }, 2500);
       document.getElementById("audio").play();
       
-    }  else if (timerSeconds === 0 && running && schedulesList.length === 0) {
+    }  else if (timerSeconds === 0 && running && scheduleList.length === 0) {
       setRunning(false);
     }
     return () => {
       clearInterval(interval);
     }
-  }, [running, timerSeconds, schedulesList]);
+  }, [running, timerSeconds, scheduleList]);
 
 
   useEffect(() => {
     try {
-      setTimerSeconds(toSecond(schedulesList[0].time));
-      setTotalTime(toSecond(schedulesList[0].time)); // fixed
+      setTimerSeconds(toSecond(scheduleList[0].time));
+      setTotalTime(toSecond(scheduleList[0].time)); // fixed
     } catch {
       setTimerSeconds(0);
       setTotalTime(0);
     }
-  }, [schedulesList]);
+  }, [scheduleList]);
 
   const startTime = () => {
     setRunning(true);
@@ -79,9 +80,45 @@ function App() {
   };
 
   const addTask = (task) => {
-    setScheduleList([...schedulesList, task]);
-    setHistory([...schedulesList, task]);
+    setScheduleList([...scheduleList, task]);
+    setHistory([...scheduleList, task]);
   };
+
+  const addWorkTask = () => {
+    const work = {
+      id: uuidv4(),
+      title: "Work",
+      time: "30:00",
+      note: ""
+    };
+    setScheduleList([...scheduleList, work]);
+  }
+
+  const duplicateFirst = () => {
+    if (scheduleList.length > 0) {
+      const firstTask = scheduleList[0];
+      const duplicatedTask = { ...firstTask, id: uuidv4() };
+      setScheduleList([...scheduleList, duplicatedTask]);
+    }
+  }
+
+  const duplicateLast = () => {
+    if (scheduleList.length > 0) {
+      const lastTask = scheduleList[scheduleList.length - 1];
+      const duplicatedTask = { ...lastTask, id: uuidv4() };
+      setScheduleList([...scheduleList, duplicatedTask]);
+    }
+  }
+
+  const addRestTask = () => {
+    const rest = {
+      id: uuidv4(),
+      title: "Rest",
+      time: "10:00",
+      note: ""
+    };
+    setScheduleList([...scheduleList, rest]);
+  }
 
   const updateSchedule = (schedule) => {
     setScheduleList(schedule);
@@ -96,16 +133,16 @@ function App() {
     setRunning(false);
     setScheduleList(history);
     try {
-      setTimerSeconds(toSecond(schedulesList[0].time));
+      setTimerSeconds(toSecond(scheduleList[0].time));
     } catch {
       setTimerSeconds(0);
     } 
   };
 
   const forward = () => {
-    if (schedulesList.length >= 1) {
+    if (scheduleList.length >= 1) {
       setRunning(false);
-      let arr = [...schedulesList];
+      let arr = [...scheduleList];
       arr.shift();
       setScheduleList(arr);
     }
@@ -118,7 +155,7 @@ function App() {
       <div id="stars2"></div>
       <div id="stars3"></div>
       
-      <TopPanel remainingTime={timerSeconds} totalTime={totalTime} running={running} 
+      <TopPanel remainingTime={timerSeconds} totalTime={totalTime} title={scheduleList.length > 0 ? scheduleList[0].title : null} running={running} 
         onStart={startTime} onStop={stopTime} onReset={reset} onForward={forward} />
 
       <div className="center-model">
@@ -141,7 +178,8 @@ function App() {
       </div>
 
       <animated.div style={{ ...slideInAnimation, height: '100vh' }}>
-        <SidePanel onOverlay={toggleOverlay} schedulesList={schedulesList} onAddTask={addTask.bind(this)}
+        <SidePanel onOverlay={toggleOverlay} scheduleList={scheduleList} onAddTask={addTask.bind(this)} onAddWork={addWorkTask}
+          onAddRest={addRestTask} onDuplicateFirst={duplicateFirst} onDuplicateLast={duplicateLast}
           onUpdateSchedule={updateSchedule.bind(this)} onClearSchedule={clearSchedule} />
       </animated.div>
 
