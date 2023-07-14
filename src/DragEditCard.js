@@ -17,17 +17,21 @@ export default function DragEditCard({ scheduleList = [], onAddTask, onUpdateSch
     }, [scheduleList]);
 
     const handleAddTask = () => {
-        // Create a temporary task for editing
-        const newTask = {
-          id: uuidv4(),
-          title: "",
-          time: "05:00",
-          note: ""
-        };
-        
-        setCancelId(newTask.id);
-        setEditingTask(newTask);
-        onAddTask(newTask);
+        if (scheduleList.length < 7) {
+            // Create a temporary task for editing
+            const newTask = {
+            id: uuidv4(),
+            title: "",
+            time: "05:00",
+            note: ""
+            };
+            
+            setCancelId(newTask.id);
+            setEditingTask(newTask);
+            onAddTask(newTask);
+        } else {
+            alert("Instead of adding more tasks, try do some of the tasks.")
+        }
     };
 
     const handleEditTask = (task) => {

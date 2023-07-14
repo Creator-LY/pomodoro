@@ -2,6 +2,7 @@ import React from 'react';
 import TopPanel from './TopPanel';
 import SidePanel from './SidePanel';
 import Model from './Model';
+import TimeLine from './TimeLine';
 import { useState, useEffect, Suspense } from 'react';
 import { useSpring, animated } from 'react-spring';
 import { Canvas } from '@react-three/fiber';
@@ -41,19 +42,21 @@ function App() {
         setTimerSeconds(timerSeconds => timerSeconds - 1);
       }, 1000)
     } else if (timerSeconds === 0 && scheduleList.length >= 1 && running) {
-      let arr = [...scheduleList];
-      arr.shift();
-      setScheduleList(arr);
+      if (scheduleList.length === 1) setRunning(false);
+      const [completedTask, ...remainingTasks] = scheduleList;
+      setHistory([...history, completedTask]);
+      setScheduleList(remainingTasks);
+
+      // Play alarm if set
       setTimeout(() => { document.getElementById("audio").load() }, 2500);
       document.getElementById("audio").play();
-      
-    }  else if (timerSeconds === 0 && running && scheduleList.length === 0) {
-      setRunning(false);
     }
+
     return () => {
       clearInterval(interval);
     }
-  }, [running, timerSeconds, scheduleList]);
+    // eslint-disable-next-line
+  }, [running, timerSeconds]);
 
 
   useEffect(() => {
@@ -80,49 +83,67 @@ function App() {
   };
 
   const addTask = (task) => {
-    setScheduleList([...scheduleList, task]);
-    setHistory([...scheduleList, task]);
+    if (scheduleList.length < 7) {
+      setScheduleList([...scheduleList, task]);
+    } else {
+      alert("Instead of adding more tasks, try do some of the tasks.")
+    }
   };
 
   const addWorkTask = () => {
-    const work = {
-      id: uuidv4(),
-      title: "Work",
-      time: "30:00",
-      note: ""
-    };
-    setScheduleList([...scheduleList, work]);
-  }
-
-  const duplicateFirst = () => {
-    if (scheduleList.length > 0) {
-      const firstTask = scheduleList[0];
-      const duplicatedTask = { ...firstTask, id: uuidv4() };
-      setScheduleList([...scheduleList, duplicatedTask]);
-    }
-  }
-
-  const duplicateLast = () => {
-    if (scheduleList.length > 0) {
-      const lastTask = scheduleList[scheduleList.length - 1];
-      const duplicatedTask = { ...lastTask, id: uuidv4() };
-      setScheduleList([...scheduleList, duplicatedTask]);
+    if (scheduleList.length < 7) {
+      const work = {
+        id: uuidv4(),
+        title: "Work",
+        time: "30:00",
+        note: ""
+      };
+      setScheduleList([...scheduleList, work]);
+    } else {
+      alert("Instead of adding more tasks, try do some of the tasks.")
     }
   }
 
   const addRestTask = () => {
-    const rest = {
-      id: uuidv4(),
-      title: "Rest",
-      time: "10:00",
-      note: ""
-    };
-    setScheduleList([...scheduleList, rest]);
+    if (scheduleList.length < 7) {
+      const rest = {
+        id: uuidv4(),
+        title: "Rest",
+        time: "10:00",
+        note: ""
+      };
+      setScheduleList([...scheduleList, rest]);
+    } else {
+      alert("Instead of adding more tasks, try do some of the tasks.")
+    }
+  }
+
+  const duplicateFirst = () => {
+    if (scheduleList.length < 7) {
+      if (scheduleList.length > 0) {
+        const firstTask = scheduleList[0];
+        const duplicatedTask = { ...firstTask, id: uuidv4() };
+        setScheduleList([...scheduleList, duplicatedTask]);
+      }
+    } else {
+      alert("Instead of adding more tasks, try do some of the tasks.")
+    }
+  }
+
+  const duplicateLast = () => {
+    if (scheduleList.length < 7) {
+      if (scheduleList.length > 0) {
+        const lastTask = scheduleList[scheduleList.length - 1];
+        const duplicatedTask = { ...lastTask, id: uuidv4() };
+        setScheduleList([...scheduleList, duplicatedTask]);
+      }
+    } else {
+      alert("Instead of adding more tasks, try do some of the tasks.")
+    }
   }
 
   const updateSchedule = (schedule) => {
     setScheduleList(schedule);
-    setHistory(schedule);
   };
 
   const clearSchedule = () => {
@@ -131,7 +152,8 @@ function App() {
 
   const reset = () => {
     setRunning(false);
-    setScheduleList(history);
+    setScheduleList([...history, ...scheduleList]);
+    setHistory([]);
     try {
       setTimerSeconds(toSecond(scheduleList[0].time));
     } catch {
@@ -142,9 +164,9 @@ function App() {
   const forward = () => {
     if (scheduleList.length >= 1) {
       setRunning(false);
-      let arr = [...scheduleList];
-      arr.shift();
-      setScheduleList(arr);
+      const [forwarded, ...remainingTasks] = scheduleList;
+      setHistory([...history, forwarded]);
+      setScheduleList(remainingTasks);
     }
   };
 
@@ -177,13 +199,16 @@ function App() {
         <FaAngleRight className="side-button-icon" size="3em" />
       </div>
 
+      <div className="right-panel">
+        <TimeLine scheduleList={scheduleList} />
+      </div>
+
       <animated.div style={{ ...slideInAnimation, height: '100vh' }}>
         <SidePanel onOverlay={toggleOverlay} scheduleList={scheduleList} onAddTask={addTask.bind(this)} onAddWork={addWorkTask}
           onAddRest={addRestTask} onDuplicateFirst={duplicateFirst} onDuplicateLast={duplicateLast}
           onUpdateSchedule={updateSchedule.bind(this)} onClearSchedule={clearSchedule} />
       </animated.div>
 
-      
       <audio id="audio" src={sound} hidden={true} type="audio/wav"></audio>
     </div>
   );

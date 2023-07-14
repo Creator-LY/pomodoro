@@ -68,6 +68,14 @@ textarea:focus {
     top: 30%;
 }
 
+.right-panel {
+    position: fixed;
+    top: 20%;
+    right: 0;
+    margin: 15px;
+    text-align: center;
+}
+
 @keyframes pulse {
     0% {
       transform: translate(-50%, -50%) scale(0);
