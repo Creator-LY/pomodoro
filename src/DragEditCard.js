@@ -131,7 +131,7 @@ export default function DragEditCard({ scheduleList = [], onAddTask, onUpdateSch
     return (
         <div>
             {scheduleList.map((task, index) => (
-                <div key={task.id}>
+                <div key={task.id+"#"+index}>
                     { editingTask && (editingTask.id === task.id) ? (
                         <div className="edit-card">
                             <div className="edit-card-content">

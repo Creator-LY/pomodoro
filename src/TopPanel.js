@@ -4,12 +4,14 @@ import './TopPanel.css';
 import { FaPlay, FaPause, FaRedo, FaStepForward, FaBell, FaMusic } from 'react-icons/fa';
 
 
-export default function TopPanel({ remainingTime, totalTime, title, running, onStart, onStop, onReset, onForward }) {
+export default function TopPanel({ remainingTime, totalTime, title, running, onStart, onStop, onReset, onForward,
+                                   onToggleAlarm }) {
     const [isBellDisable, setBellDisable] = useState(false);
     const [isMusicDisable, setMusicDisable] = useState(false);
 
     const handleBellClick = () => {
         setBellDisable(!isBellDisable);
+        onToggleAlarm();
     };
     
       const handleMusicClick = () => {

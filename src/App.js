@@ -3,13 +3,14 @@ import TopPanel from './TopPanel';
 import SidePanel from './SidePanel';
 import Model from './Model';
 import TimeLine from './TimeLine';
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSpring, animated } from 'react-spring';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
 import { v4 as uuidv4 } from 'uuid';
 import { FaAngleRight } from 'react-icons/fa';
-import sound from './assets/alarm.wav';
+import beeping from './assets/alarm.wav';
+import crowing from './assets/mixkit-short-rooster-crowing-2470.wav';
 import './App.css';
 
 
@@ -21,6 +22,10 @@ function App() {
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
   const [running, setRunning]  = useState(false);
+
+  const alarmRef = useRef(null);
+  const [alarm, setAlarm] = useState(beeping);
+  const [alarmPlaying, setAlarmPlaying] = useState(true);
 
 
   // Slide in animation for Side Panel
@@ -48,8 +53,12 @@ function App() {
       setScheduleList(remainingTasks);
 
       // Play alarm if set
-      setTimeout(() => { document.getElementById("audio").load() }, 2500);
-      document.getElementById("audio").play();
+      if (alarmPlaying) {
+        const audioElement = alarmRef.current;
+        audioElement.pause();
+        audioElement.currentTime = 0;
+        audioElement.play();
+      }
     }
 
     return () => {
@@ -170,6 +179,33 @@ function App() {
     }
   };
 
+  const toggleAlarm = () => {
+    setAlarmPlaying(!alarmPlaying);
+  }
+
+  const swapAlarm = async (type) => {
+    const audioElement = alarmRef.current;
+    audioElement.pause();
+
+    switch (type) {
+      case 'beeping':
+        setAlarm(beeping);
+        break;
+      case 'crowing':
+        setAlarm(crowing);
+        break;
+      default:
+        setAlarm(beeping);
+        break;
+    }
+    // Play this alarm type
+    audioElement.load();
+    await new Promise((resolve) => {
+      audioElement.onloadeddata = resolve;
+    });
+    audioElement.play();
+  };
+
   return (
     <div>
       {/* Floating stars */}
@@ -178,7 +214,7 @@ function App() {
       <div id="stars3"></div>
       
       <TopPanel remainingTime={timerSeconds} totalTime={totalTime} title={scheduleList.length > 0 ? scheduleList[0].title : null} running={running} 
-        onStart={startTime} onStop={stopTime} onReset={reset} onForward={forward} />
+        onStart={startTime} onStop={stopTime} onReset={reset} onForward={forward} onToggleAlarm={toggleAlarm} />
 
       <div className="center-model">
         <Canvas camera={{ position: [-9.331, 4.615, 9.464], rotation: [-0.233, -0.771, -0.164], zoom: "2" }}>
@@ -206,10 +242,10 @@ function App() {
       <animated.div style={{ ...slideInAnimation, height: '100vh' }}>
         <SidePanel onOverlay={toggleOverlay} scheduleList={scheduleList} onAddTask={addTask.bind(this)} onAddWork={addWorkTask}
           onAddRest={addRestTask} onDuplicateFirst={duplicateFirst} onDuplicateLast={duplicateLast}
-          onUpdateSchedule={updateSchedule.bind(this)} onClearSchedule={clearSchedule} />
+          onUpdateSchedule={updateSchedule.bind(this)} onClearSchedule={clearSchedule} history={history} onSwapAlarm={swapAlarm.bind(this)}/>
       </animated.div>
 
-      <audio id="audio" src={sound} hidden={true} type="audio/wav"></audio>
+      <audio ref={alarmRef} src={alarm} hidden={true} type="audio/wav"></audio>
     </div>
   );
 }
