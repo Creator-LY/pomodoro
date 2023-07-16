@@ -1,9 +1,10 @@
 import React, { useRef, useEffect } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
+import plantModel from "./assets/plant.glb";
 
 export default function Model({ running }) {
   const group = useRef();
-  const { nodes, materials, animations } = useGLTF("/plant.glb");
+  const { nodes, materials, animations } = useGLTF(plantModel);
   const { actions, names } = useAnimations(animations, group);
 
   useEffect(() => {
