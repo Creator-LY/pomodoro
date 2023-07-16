@@ -11,6 +11,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { FaAngleRight } from 'react-icons/fa';
 import beeping from './assets/alarm.wav';
 import crowing from './assets/mixkit-short-rooster-crowing-2470.wav';
+import music1 from './assets/eco-technology-145636.mp3';
+import music2 from './assets/just-relax-11157.mp3';
+import music3 from './assets/lofi-study-112191.mp3';
+import music4 from './assets/motivational-day-112790.mp3';
+import music5 from './assets/please-calm-my-mind-125566.mp3';
 import './App.css';
 
 
@@ -26,6 +31,18 @@ function App() {
   const alarmRef = useRef(null);
   const [alarm, setAlarm] = useState(beeping);
   const [alarmPlaying, setAlarmPlaying] = useState(true);
+
+  const musicRef = useRef(null);
+  const [playList, setPlayList] = useState([
+    { id: uuidv4(), title: 'Eco Technology', src: music1, enable: true },
+    { id: uuidv4(), title: 'Just Relax', src: music2, enable: true },
+    { id: uuidv4(), title: 'Lofi Study', src: music3, enable: true },
+    { id: uuidv4(), title: 'Motivational Day', src: music4, enable: true },
+    { id: uuidv4(), title: 'Please Calm My Mind', src: music5, enable: true },
+  ]);
+  const [currentMusicIndex, setCurrentMusicIndex] = useState(0);
+  const [musicPlaying, setMusicPlaying] = useState(true);
+  const [volume, setVolume] = useState(0.8); // Initial volume set to 80%
 
 
   // Slide in animation for Side Panel
@@ -206,6 +223,64 @@ function App() {
     audioElement.play();
   };
 
+  const toggleMusic = () => {
+    setMusicPlaying(!musicPlaying);
+  }
+
+  const playNextMusic = () => {
+    let nextIndex = currentMusicIndex + 1;
+    while (nextIndex !== currentMusicIndex) {
+      if (playList[nextIndex % playList.length].enable) {
+        setCurrentMusicIndex(nextIndex % playList.length);
+        break;
+      }
+      nextIndex++;
+    }
+  };
+
+  const togglePlayback = async () => {
+    const audioElement = musicRef.current;
+    if (musicPlaying && running) {
+      try {
+        await audioElement.play();
+      } catch (error) {
+        console.error("music playback failed:", error);
+      }
+    } else {
+      audioElement.pause();
+    }
+  };
+
+  useEffect(() => {
+    const audioElement = musicRef.current;
+    audioElement.addEventListener("ended", playNextMusic);
+
+    return () => {
+      audioElement.removeEventListener("ended", playNextMusic);
+    };
+    // eslint-disable-next-line
+  }, [currentMusicIndex]);
+
+  useEffect(() => {
+    const audioElement = musicRef.current;
+    // Load the new music when the current music index changes
+    audioElement.load();
+
+    // Play/pause based on the musicPlaying state
+    togglePlayback();
+    // eslint-disable-next-line
+  }, [musicPlaying, running]);
+
+  useEffect(() => {
+    alarmRef.current.volume = volume;
+    musicRef.current.volume = volume;
+  }, [volume])
+
+  useEffect(() => {
+    if (playList.every((music) => !music.enable)) setMusicPlaying(false);
+    else setMusicPlaying(true);
+  }, [playList])
+
   return (
     <div>
       {/* Floating stars */}
@@ -214,7 +289,8 @@ function App() {
       <div id="stars3"></div>
       
       <TopPanel remainingTime={timerSeconds} totalTime={totalTime} title={scheduleList.length > 0 ? scheduleList[0].title : null} running={running} 
-        onStart={startTime} onStop={stopTime} onReset={reset} onForward={forward} onToggleAlarm={toggleAlarm} />
+        onStart={startTime} onStop={stopTime} onReset={reset} onForward={forward} 
+        alarmPlaying={alarmPlaying} musicPlaying={musicPlaying} onToggleAlarm={toggleAlarm} onToggleMusic={toggleMusic} />
 
       <div className="center-model">
         <Canvas camera={{ position: [-9.331, 4.615, 9.464], rotation: [-0.233, -0.771, -0.164], zoom: "2" }}>
@@ -242,10 +318,13 @@ function App() {
       <animated.div style={{ ...slideInAnimation, height: '100vh' }}>
         <SidePanel onOverlay={toggleOverlay} scheduleList={scheduleList} onAddTask={addTask.bind(this)} onAddWork={addWorkTask}
           onAddRest={addRestTask} onDuplicateFirst={duplicateFirst} onDuplicateLast={duplicateLast}
-          onUpdateSchedule={updateSchedule.bind(this)} onClearSchedule={clearSchedule} history={history} onSwapAlarm={swapAlarm.bind(this)}/>
+          onUpdateSchedule={updateSchedule.bind(this)} onClearSchedule={clearSchedule} history={history} onSwapAlarm={swapAlarm.bind(this)}
+          playList={playList} setPlayList={setPlayList.bind(this)}
+          volume={volume} setVolume={setVolume.bind(this)} />
       </animated.div>
 
       <audio ref={alarmRef} src={alarm} hidden={true} type="audio/wav"></audio>
+      <audio ref={musicRef} src={playList[currentMusicIndex].src} hidden={true} type="audio/mpeg"></audio>
     </div>
   );
 }

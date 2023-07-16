@@ -4,11 +4,12 @@ import './SidePanel.css';
 import DragEditCard from './DragEditCard';
 import { ImCross, ImPencil } from 'react-icons/im';
 import { GiAlarmClock, GiChicken} from 'react-icons/gi';
+import { FaVolumeDown, FaVolumeUp } from 'react-icons/fa';
 
 
 export default function SidePanel({onOverlay, scheduleList, onAddTask, onAddWork, onAddRest, 
                                    onDuplicateFirst, onDuplicateLast, onUpdateSchedule, onClearSchedule, history,
-                                   onSwapAlarm}) {
+                                   onSwapAlarm, playList, setPlayList, volume, setVolume}) {
     const [showManage, setShowManage] = useState(false);
     const [totalTime, setTotalTime] = useState({ minutes: 0, seconds: 0 });
 
@@ -31,6 +32,14 @@ export default function SidePanel({onOverlay, scheduleList, onAddTask, onAddWork
     
         setTotalTime(totalTime);
     }, [scheduleList]);
+
+    const handleMusicEnable = (event, id) => {
+        const isChecked = event.target.checked;
+        const updatedPlayList = playList.map((music) =>
+          music.id === id ? { ...music, enable: isChecked } : music
+        );
+        setPlayList(updatedPlayList);
+      };
 
     return (
         <div className="sidepanel">
@@ -81,6 +90,32 @@ export default function SidePanel({onOverlay, scheduleList, onAddTask, onAddWork
                     </div>
                 </div>
                 <h3>Music</h3>
+                {playList.map((music) => (
+                    <div key={music.id} className="music-group">
+                        <input type="checkbox" id={"checkbox-" + music.id} checked={music.enable} onChange={(e) => handleMusicEnable(e, music.id)}/>
+                        <label htmlFor={"checkbox-" + music.id}>{music.title}</label>
+                    </div>
+                ))}
+                <div id="player">
+                    <FaVolumeDown size="1.2rem" />
+                    <div className="slider">
+                        <input
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.1"
+                            value={volume}
+                            onChange={(e) => setVolume(e.target.value)}
+                        />
+                        <progress
+                            min="0"
+                            max="1"
+                            value={volume}
+                        />
+                    </div>
+                    <FaVolumeUp size="1.2rem" />
+                    <span>{volume*100}</span>
+                </div>
             </div>
         </div>
     )

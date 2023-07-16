@@ -1,28 +1,15 @@
 import Timer from './Timer';
-import { useState } from 'react';
 import './TopPanel.css';
 import { FaPlay, FaPause, FaRedo, FaStepForward, FaBell, FaMusic } from 'react-icons/fa';
 
 
 export default function TopPanel({ remainingTime, totalTime, title, running, onStart, onStop, onReset, onForward,
-                                   onToggleAlarm }) {
-    const [isBellDisable, setBellDisable] = useState(false);
-    const [isMusicDisable, setMusicDisable] = useState(false);
-
-    const handleBellClick = () => {
-        setBellDisable(!isBellDisable);
-        onToggleAlarm();
-    };
-    
-      const handleMusicClick = () => {
-        setMusicDisable(!isMusicDisable);
-    };
-
+                                   alarmPlaying, musicPlaying, onToggleAlarm, onToggleMusic }) {
     return (
         <div className="top-panel">
             <div className="left-section">
-                <button className="icon-button" onClick={handleBellClick}><FaBell size="2em" />{isBellDisable && <span className="cross-icon">X</span>}</button>
-                <button className="icon-button" onClick={handleMusicClick}><FaMusic size="2em" />{isMusicDisable && <span className="cross-icon">X</span>}</button>
+                <button className="icon-button" onClick={onToggleAlarm}><FaBell size="2em" />{!alarmPlaying && <span className="cross-icon">X</span>}</button>
+                <button className="icon-button" onClick={onToggleMusic}><FaMusic size="2em" />{!musicPlaying && <span className="cross-icon">X</span>}</button>
             </div>
             {title ? <div className="middle-section">--- {title} ---</div> : <div className="middle-section">--- Fulfill Your Day ---</div>}
             <div className="right-section">
