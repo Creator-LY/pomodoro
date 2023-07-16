@@ -2,8 +2,10 @@
 
 Welcome to the Pomodoro Project! This is a productivity-enhancing application that utilizes the popular Pomodoro technique to help you manage your time effectively and boost your productivity. With a variety of features like timers, alarms, music integration, task scheduling, and more, the Pomodoro Project aims to make your work sessions enjoyable and efficient.
 
+[Click me to go to the deployment of the pomodoro website](https://creator-ly.github.io/pomodoro)
+
 ## Features
---
+
 ### Timer
 + The timer follows the Pomodoro technique, allowing you to set work intervals and break durations.
 + The animated timer visually indicates the remaining time for the current doings.
