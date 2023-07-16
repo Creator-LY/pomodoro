@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/pomodoro/static/css/main.c890ea7e.css",
+    "main.js": "/pomodoro/static/js/main.0664f952.js",
+    "static/media/please-calm-my-mind-125566.mp3": "/pomodoro/static/media/please-calm-my-mind-125566.1bf73e5a5c2f055f5926.mp3",
+    "static/media/just-relax-11157.mp3": "/pomodoro/static/media/just-relax-11157.e13879e243b2f522545e.mp3",
+    "static/media/motivational-day-112790.mp3": "/pomodoro/static/media/motivational-day-112790.9999023ca55551a52349.mp3",
+    "static/media/lofi-study-112191.mp3": "/pomodoro/static/media/lofi-study-112191.971be2d4c67fa5d63775.mp3",
+    "static/media/eco-technology-145636.mp3": "/pomodoro/static/media/eco-technology-145636.d293fcca0fa2d34537c5.mp3",
+    "static/media/alarm.wav": "/pomodoro/static/media/alarm.591a55560e98a77088f5.wav",
+    "static/media/mixkit-short-rooster-crowing-2470.wav": "/pomodoro/static/media/mixkit-short-rooster-crowing-2470.d3f42f81331de5b17e26.wav",
+    "index.html": "/pomodoro/index.html",
+    "main.c890ea7e.css.map": "/pomodoro/static/css/main.c890ea7e.css.map",
+    "main.0664f952.js.map": "/pomodoro/static/js/main.0664f952.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c890ea7e.css",
+    "static/js/main.0664f952.js"
+  ]
+}
