@@ -5,19 +5,20 @@ import { MdAddBox, MdEdit, MdPunchClock } from 'react-icons/md';
 import { v4 as uuidv4 } from 'uuid';
 
 
-export default function DragEditCard({ scheduleList = [], onAddTask, onUpdateSchedule }) {
+export default function DragEditCard({ scheduleList = [], onAddTask, onUpdateSchedule, changeMenu, setShowManage }) {
     const [editingTask, setEditingTask] = useState(null);
     const [cancelId, setCancelId] = useState(null);
     const [draggedOverIndex, setDraggedOverIndex] = useState(null);
 
     useEffect(() => {
-        if (scheduleList === []) {
-            setEditingTask([]);
-        }
-    }, [scheduleList]);
+        handleCancelTask();
+    // eslint-disable-next-line
+    }, [changeMenu]);
 
     const handleAddTask = () => {
         if (scheduleList.length < 7) {
+            // Close tool menu
+            setShowManage(false);
             // Create a temporary task for editing
             const newTask = {
             id: uuidv4(),

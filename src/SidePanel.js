@@ -7,13 +7,15 @@ import { GiAlarmClock, GiChicken} from 'react-icons/gi';
 import { FaVolumeDown, FaVolumeUp } from 'react-icons/fa';
 
 
-export default function SidePanel({onOverlay, scheduleList, onAddTask, onAddWork, onAddRest, 
-                                   onDuplicateFirst, onDuplicateLast, onUpdateSchedule, onClearSchedule, history,
+export default function SidePanel({onOverlay, schedule, history,
                                    onSwapAlarm, playList, setPlayList, volume, setVolume}) {
+    const { scheduleList, onAddTask, onAddWork, onAddRest, onDuplicateFirst, onDuplicateLast, onUpdateSchedule, onClearSchedule } = schedule;
     const [showManage, setShowManage] = useState(false);
     const [totalTime, setTotalTime] = useState({ minutes: 0, seconds: 0 });
 
     const [selectedAlarm, setSelectedAlarm] = useState(null);
+
+    const [changeMenu, setChangeMenu] = useState(false);
 
     useEffect(() => {
         const totalTime = scheduleList.reduce((total, task) => {
@@ -43,7 +45,7 @@ export default function SidePanel({onOverlay, scheduleList, onAddTask, onAddWork
 
     return (
         <div className="sidepanel">
-            <button id="exit-button" onClick={onOverlay}><ImCross cursor="pointer" size="2em"/></button>
+            <button id="exit-button" onClick={() => {setChangeMenu(!changeMenu);onOverlay();}}><ImCross cursor="pointer" size="2em"/></button>
             <div>
                 <div className="stat-container">
                     <div className="inline-box">Remaining Tasks: <span className="t18">{scheduleList.length}</span></div>
@@ -63,7 +65,7 @@ export default function SidePanel({onOverlay, scheduleList, onAddTask, onAddWork
                 <div className="head-container">
                     <span className="t18">Tasks</span>
                     <div style={{ position : "relative" }}>
-                        <button className="manage-button" onClick={() => {setShowManage(!showManage);}}><ImPencil cursor="pointer" size="1.5em" /></button>
+                        <button className="manage-button" onClick={() => {setChangeMenu(!changeMenu);setShowManage(!showManage);}}><ImPencil cursor="pointer" size="1.5em" /></button>
                         {showManage ? <div className="manage-section">
                             <div className="manage-block" onClick={() => {onAddWork();setShowManage(false);}}>Add work block (basic)</div>
                             <div className="manage-block" onClick={() => {onAddRest();setShowManage(false);}}>Add rest block (basic)</div>
@@ -73,7 +75,8 @@ export default function SidePanel({onOverlay, scheduleList, onAddTask, onAddWork
                         </div> : null}
                     </div>
                 </div>
-                <DragEditCard scheduleList={scheduleList} onAddTask={onAddTask} onUpdateSchedule={onUpdateSchedule} />
+                <DragEditCard scheduleList={scheduleList} onAddTask={onAddTask} onUpdateSchedule={onUpdateSchedule} 
+                    changeMenu={changeMenu} setShowManage={setShowManage.bind(this)}/>
             </div>
             <div className="sound-container">
                 <h3>Alarm</h3>

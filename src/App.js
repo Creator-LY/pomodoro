@@ -1,5 +1,5 @@
 import React from 'react';
-import TopPanel from './TopPanel';
+import Timer from './Timer';
 import SidePanel from './SidePanel';
 import Model from './Model';
 import TimeLine from './TimeLine';
@@ -8,7 +8,7 @@ import { useSpring, animated } from 'react-spring';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
 import { v4 as uuidv4 } from 'uuid';
-import { FaAngleRight } from 'react-icons/fa';
+import { FaPlay, FaPause, FaRedo, FaStepForward, FaBell, FaMusic, FaAngleRight } from 'react-icons/fa';
 import beeping from './assets/alarm.wav';
 import crowing from './assets/mixkit-short-rooster-crowing-2470.wav';
 import music1 from './assets/eco-technology-145636.mp3';
@@ -71,10 +71,9 @@ function App() {
 
       // Play alarm if set
       if (alarmPlaying) {
-        const audioElement = alarmRef.current;
-        audioElement.pause();
-        audioElement.currentTime = 0;
-        audioElement.play();
+        musicRef.current.pause()
+        alarmRef.current.play();
+        togglePlayback();
       }
     }
 
@@ -95,12 +94,9 @@ function App() {
     }
   }, [scheduleList]);
 
-  const startTime = () => {
-    setRunning(true);
-  };
-
-  const stopTime = () => {
-    setRunning(false);
+  const toggleStartTime = () => {
+    if (scheduleList.length > 0)
+      setRunning(!running);
   };
 
   const toggleOverlay = () => {
@@ -288,16 +284,38 @@ function App() {
     }
   }, [playList]);
 
+  const schedule = {
+    scheduleList: scheduleList,
+    onAddTask: addTask.bind(this),
+    onAddWork: addWorkTask,
+    onAddRest: addRestTask,
+    onDuplicateFirst: duplicateFirst,
+    onDuplicateLast: duplicateLast,
+    onUpdateSchedule: updateSchedule.bind(this),
+    onClearSchedule: clearSchedule
+  };
+
   return (
     <div>
       {/* Floating stars */}
       <div id="stars"></div>
       <div id="stars2"></div>
       <div id="stars3"></div>
-      
-      <TopPanel remainingTime={timerSeconds} totalTime={totalTime} title={scheduleList.length > 0 ? scheduleList[0].title : null} running={running} 
-        onStart={startTime} onStop={stopTime} onReset={reset} onForward={forward} 
-        alarmPlaying={alarmPlaying} musicPlaying={musicPlaying} onToggleAlarm={toggleAlarm} onToggleMusic={toggleMusic} />
+
+      <div className="top-panel">
+        <div className="left-section">
+          <button className="icon-button" onClick={toggleAlarm}><FaBell size="2em" />{!alarmPlaying && <span className="cross-icon">X</span>}</button>
+          <button className="icon-button" onClick={toggleMusic}><FaMusic size="2em" />{!musicPlaying && <span className="cross-icon">X</span>}</button>
+        </div>
+        <div className="middle-section">--- {scheduleList[0] ? scheduleList[0].title : "Fulfill Your Day"} ---</div>
+        <div className="right-section">
+            <button className="icon-button" onClick={toggleStartTime}>{running ? <FaPause size="2em" />:<FaPlay size="2em" />}</button>
+            <button className="icon-button" onClick={reset}><FaRedo size="2em" /></button>
+            <button className="icon-button" onClick={forward}><FaStepForward size="2em" /></button>
+            
+            <Timer remainingTime={timerSeconds} totalTime={totalTime} />
+        </div>
+      </div>
 
       <div className="center-model">
         <Canvas camera={{ position: [-9.331, 4.615, 9.464], rotation: [-0.233, -0.771, -0.164], zoom: "2" }}>
@@ -323,9 +341,8 @@ function App() {
       </div>
 
       <animated.div style={{ ...slideInAnimation, height: '100vh' }}>
-        <SidePanel onOverlay={toggleOverlay} scheduleList={scheduleList} onAddTask={addTask.bind(this)} onAddWork={addWorkTask}
-          onAddRest={addRestTask} onDuplicateFirst={duplicateFirst} onDuplicateLast={duplicateLast}
-          onUpdateSchedule={updateSchedule.bind(this)} onClearSchedule={clearSchedule} history={history} onSwapAlarm={swapAlarm.bind(this)}
+        <SidePanel onOverlay={toggleOverlay} schedule={schedule} history={history}
+          onSwapAlarm={swapAlarm.bind(this)}
           playList={playList} setPlayList={setPlayList.bind(this)}
           volume={volume} setVolume={setVolume.bind(this)} />
       </animated.div>
