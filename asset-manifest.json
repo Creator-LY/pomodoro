@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/pomodoro/static/css/main.fe03a08d.css",
-    "main.js": "/pomodoro/static/js/main.9584fbc7.js",
+    "main.css": "/pomodoro/static/css/main.43efb88b.css",
+    "main.js": "/pomodoro/static/js/main.9bb18091.js",
     "static/media/please-calm-my-mind-125566.mp3": "/pomodoro/static/media/please-calm-my-mind-125566.1bf73e5a5c2f055f5926.mp3",
     "static/media/just-relax-11157.mp3": "/pomodoro/static/media/just-relax-11157.e13879e243b2f522545e.mp3",
     "static/media/motivational-day-112790.mp3": "/pomodoro/static/media/motivational-day-112790.9999023ca55551a52349.mp3",
@@ -11,11 +11,11 @@
     "static/media/mixkit-short-rooster-crowing-2470.wav": "/pomodoro/static/media/mixkit-short-rooster-crowing-2470.d3f42f81331de5b17e26.wav",
     "static/media/plant.glb": "/pomodoro/static/media/plant.c4d5593e71ffaf2b5efb.glb",
     "index.html": "/pomodoro/index.html",
-    "main.fe03a08d.css.map": "/pomodoro/static/css/main.fe03a08d.css.map",
-    "main.9584fbc7.js.map": "/pomodoro/static/js/main.9584fbc7.js.map"
+    "main.43efb88b.css.map": "/pomodoro/static/css/main.43efb88b.css.map",
+    "main.9bb18091.js.map": "/pomodoro/static/js/main.9bb18091.js.map"
   },
   "entrypoints": [
-    "static/css/main.fe03a08d.css",
-    "static/js/main.9584fbc7.js"
+    "static/css/main.43efb88b.css",
+    "static/js/main.9bb18091.js"
   ]
 }
