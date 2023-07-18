@@ -227,22 +227,11 @@ function App() {
     setMusicPlaying(!musicPlaying);
   }
 
-  const playNextMusic = () => {
-    let nextIndex = currentMusicIndex + 1;
-    while (nextIndex !== currentMusicIndex) {
-      if (playList[nextIndex % playList.length].enable) {
-        setCurrentMusicIndex(nextIndex % playList.length);
-        break;
-      }
-      nextIndex++;
-    }
-  };
-
-  const togglePlayback = async () => {
+  const togglePlayback = () => {
     const audioElement = musicRef.current;
     if (musicPlaying && running) {
       try {
-        await audioElement.play();
+        audioElement.play();
       } catch (error) {
         console.error("music playback failed:", error);
       }
@@ -251,35 +240,53 @@ function App() {
     }
   };
 
+  const playNextMusic = () => {
+    let nextIndex = (currentMusicIndex + 1) % playList.length;
+    while (nextIndex !== currentMusicIndex) {
+      if (playList[nextIndex].enable) {
+        setCurrentMusicIndex(nextIndex);
+        return;
+      }
+      nextIndex = (nextIndex + 1) % playList.length;
+    }
+    // repeat current music
+    togglePlayback();
+  };
+
   useEffect(() => {
     const audioElement = musicRef.current;
+    audioElement.load();
     audioElement.addEventListener("ended", playNextMusic);
 
     return () => {
       audioElement.removeEventListener("ended", playNextMusic);
     };
     // eslint-disable-next-line
-  }, [currentMusicIndex]);
+  }, [currentMusicIndex, playList, running]);
 
   useEffect(() => {
-    const audioElement = musicRef.current;
-    // Load the new music when the current music index changes
-    audioElement.load();
-
-    // Play/pause based on the musicPlaying state
     togglePlayback();
     // eslint-disable-next-line
-  }, [musicPlaying, running]);
+  }, [musicPlaying, running, currentMusicIndex]);
 
   useEffect(() => {
     alarmRef.current.volume = volume;
     musicRef.current.volume = volume;
-  }, [volume])
+  }, [volume]);
 
   useEffect(() => {
-    if (playList.every((music) => !music.enable)) setMusicPlaying(false);
-    else setMusicPlaying(true);
-  }, [playList])
+    // Find the index of the first music item with `enable` set to true
+    const firstEnabledIndex = playList.findIndex((item) => item.enable);
+
+    if (firstEnabledIndex !== -1) {
+      setMusicPlaying(true);
+      // If at least one music item is enabled, set currentMusicIndex to the first enabled item
+      setCurrentMusicIndex(firstEnabledIndex);
+    } else {
+      setMusicPlaying(false);
+      setCurrentMusicIndex(0);
+    }
+  }, [playList]);
 
   return (
     <div>

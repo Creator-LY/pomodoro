@@ -81,7 +81,7 @@
 
 .task-container {
     display: block;
-    flex: auto;
+    flex: 1;
     max-width: 480px;
     margin: 20px auto 42px;
 }
